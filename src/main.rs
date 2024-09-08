@@ -1,12 +1,16 @@
+use clap::{CommandFactory, Parser};
 use std::fs::File;
 use std::io::{self, BufReader};
-use clap::{Parser, CommandFactory};
 
 mod input_processor;
 use input_processor::{process_input, CountOptions};
 
 #[derive(Parser)]
-#[command(author, version, about = "A simple word count program by Rust and Cursor")]
+#[command(
+    author,
+    version,
+    about = "A simple word count program by Rust and Cursor"
+)]
 struct Cli {
     /// Show line count
     #[arg(short = 'l', long)]
