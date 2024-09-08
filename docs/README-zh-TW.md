@@ -30,7 +30,7 @@
    cargo build --release
    ```
 
-4. 可��行檔將位於 `target/release/wc`
+4. 可執行檔將位於 `target/release/wc`
 
 ## 🚀 使用方法
 
