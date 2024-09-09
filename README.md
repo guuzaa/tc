@@ -85,7 +85,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 🙏 Acknowledgements
 
 - The Rust community for their amazing tools and support 🦀❤️
-- The original Unix `tc` command for inspiration 🖥️
+- The original Unix `wc` command for inspiration 🖥️
 - The editor Cursor 🤖
 
 Happy counting! 🎉📊🚀

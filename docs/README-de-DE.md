@@ -84,7 +84,7 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie i
 ## 🙏 Danksagungen
 
 - Der Rust-Community für ihre erstaunlichen Werkzeuge und Unterstützung 🦀❤️
-- Dem ursprünglichen Unix `tc`-Befehl für die Inspiration 🖥️
+- Dem ursprünglichen Unix `wc`-Befehl für die Inspiration 🖥️
 - Dem Cursor-Editor 🤖
 
 Viel Spaß beim Zählen! 🎉📊🚀
