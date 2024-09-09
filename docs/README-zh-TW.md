@@ -2,6 +2,8 @@
 
 一個用 Rust 編寫的簡單高效的字數統計程式！🚀
 
+[English](../README.md) | [简体中文](README-zh-CN.md) | 繁體中文 | [日本語](README-ja-JP.md) | [한국어](README-ko-KR.md) | [Deutsch](README-de-DE.md)
+
 ## 📝 描述
 
 這個 Rust 實現的經典 `wc`（字數統計）命令列工具可以統計文字檔案或標準輸入中的行數、單字數和字元數。它快速、可靠，並且支援 Unicode！🌍✨
@@ -21,8 +23,8 @@
 
 2. 複製此儲存庫：
    ```
-   git clone https://github.com/yourusername/rust-wc.git
-   cd rust-wc
+   git clone https://github.com/guuzaa/wc.rs.git
+   cd wc.rs
    ```
 
 3. 建置專案：
@@ -77,7 +79,7 @@ cargo test
 
 ## 📜 授權條款
 
-本專案採用 MIT 授權條款。詳情請參閱 [LICENSE](LICENSE) 檔案。📄
+本專案採用 MIT 授權條款。詳情請參閱 [LICENSE](../LICENSE) 檔案。📄
 
 ## 🙏 致謝
 

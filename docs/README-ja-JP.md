@@ -2,6 +2,8 @@
 
 Rustで書かれたシンプルで効率的な単語カウントプログラム！🚀
 
+[English](../README.md) | [简体中文](README-zh-CN.md) | [繁體中文](README-zh-TW.md) | 日本語 | [한국어](README-ko-KR.md) | [Deutsch](README-de-DE.md)
+
 ## 📝 説明
 
 この Rust 実装の古典的な `wc`（単語カウント）コマンドラインツールは、テキストファイルや標準入力の行数、単語数、文字数をカウントできます。高速で信頼性が高く、Unicodeをサポートしています！🌍✨
@@ -21,8 +23,8 @@ Rustで書かれたシンプルで効率的な単語カウントプログラム�
 
 2. このリポジトリをクローンします：
    ```
-   git clone https://github.com/yourusername/rust-wc.git
-   cd rust-wc
+   git clone https://github.com/guuzaa/wc.rs.git
+   cd wc.rs
    ```
 
 3. プロジェクトをビルドします：
@@ -77,7 +79,7 @@ cargo test
 
 ## 📜 ライセンス
 
-このプロジェクトは MIT ライセンスの下でライセンスされています。詳細は [LICENSE](LICENSE) ファイルを参照してください。📄
+このプロジェクトは MIT ライセンスの下でライセンスされています。詳細は [LICENSE](../LICENSE) ファイルを参照してください。📄
 
 ## 🙏 謝辞
 

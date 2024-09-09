@@ -2,6 +2,7 @@
 
 Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니다! 🚀
 
+[English](../README.md) | [简体中文](README-zh-CN.md) | [繁體中文](README-zh-TW.md) | [日本語](README-ja-JP.md) | 한국어 | [Deutsch](README-de-DE.md)
 ## 📝 설명
 
 이 Rust로 구현된 고전적인 `wc` (단어 수 세기) 명령줄 도구는 텍스트 파일이나 표준 입력에서 줄 수, 단어 수, 문자 수를 세는 기능을 제공합니다. 빠르고 안정적이며 유니코드를 지원합니다! 🌍✨
@@ -21,8 +22,8 @@ Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니
 
 2. 이 저장소를 클론하세요:
    ```
-   git clone https://github.com/yourusername/rust-wc.git
-   cd rust-wc
+   git clone https://github.com/guuzaa/wc.rs.git
+   cd wc.rs
    ```
 
 3. 프로젝트를 빌드하세요:
@@ -77,7 +78,7 @@ cargo test
 
 ## 📜 라이선스
 
-이 프로젝트는 MIT 라이선스 하에 라이선스가 부여되었습니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요. 📄
+이 프로젝트는 MIT 라이선스 하에 라이선스가 부여되었습니다. 자세한 내용은 [LICENSE](../LICENSE) 파일을 참조하세요. 📄
 
 ## 🙏 감사의 말
 

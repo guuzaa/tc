@@ -2,7 +2,7 @@
 
 A simple and efficient word count program written in Rust! 🚀
 
-[English](README.md) | [简体中文](docs/README-zh-CN.md) | [繁體中文](docs/README-zh-TW.md) | [日本語](docs/README-ja-JP.md) | [한국어](docs/README-ko-KR.md) | [Deutsch](docs/README-de-DE.md)
+English | [简体中文](docs/README-zh-CN.md) | [繁體中文](docs/README-zh-TW.md) | [日本語](docs/README-ja-JP.md) | [한국어](docs/README-ko-KR.md) | [Deutsch](docs/README-de-DE.md)
 
 ## 📝 Description
 
@@ -23,8 +23,8 @@ This Rust implementation of the classic `wc` (word count) command-line tool allo
 
 2. Clone this repository:
    ```
-   git clone https://github.com/yourusername/rust-wc.git
-   cd rust-wc
+   git clone https://github.com/guuzaa/wc.rs.git
+   cd wc.rs
    ```
 
 3. Build the project:

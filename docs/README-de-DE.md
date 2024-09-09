@@ -2,6 +2,8 @@
 
 Ein einfaches und effizientes Wortzählprogramm, geschrieben in Rust! 🚀
 
+[English](../README.md) | [简体中文](README-zh-CN.md) | [繁體中文](README-zh-TW.md) | [日本語](README-ja-JP.md) | [한국어](README-ko-KR.md) | Deutsch
+
 ## 📝 Beschreibung
 
 Diese Rust-Implementierung des klassischen `wc` (Wortzählung) Kommandozeilenwerkzeugs ermöglicht es Ihnen, Zeilen, Wörter und Zeichen in Textdateien oder aus der Standardeingabe zu zählen. Es ist schnell, zuverlässig und unterstützt Unicode! 🌍✨
@@ -21,8 +23,8 @@ Diese Rust-Implementierung des klassischen `wc` (Wortzählung) Kommandozeilenwer
 
 2. Klonen Sie dieses Repository:
    ```
-   git clone https://github.com/yourusername/rust-wc.git
-   cd rust-wc
+   git clone https://github.com/guuzaa/wc.rs.git
+   cd wc.rs
    ```
 
 3. Bauen Sie das Projekt:
@@ -77,7 +79,7 @@ Beiträge sind willkommen! Zögern Sie nicht, Probleme zu melden oder Pull-Reque
 
 ## 📜 Lizenz
 
-Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie in der [LICENSE](LICENSE) Datei. 📄
+Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie in der [LICENSE](../LICENSE) Datei. 📄
 
 ## 🙏 Danksagungen
 
