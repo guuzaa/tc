@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build Release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rust: stable
+            targets: 
+              - x86_64-unknown-linux-gnu
+              - x86_64-unknown-linux-musl
+              - i686-unknown-linux-musl
+              - aarch64-unknown-linux-musl
+              - arm-unknown-linux-musleabihf
+          - os: macos-latest
+            targets:
+              - x86_64-apple-darwin
+              - aarch64-apple-darwin
+          - os: windows-latest
+            targets:
+              - x86_64-pc-windows-msvc
+              - i686-pc-windows-msvc
+              - aarch64-pc-windows-msvc
+          - os: ubuntu-latest
+            targets:
+              - x86_64-unknown-freebsd
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Add targets
+      run: |
+        for target in ${{ join(matrix.targets, ' ') }}; do
+          rustup target add $target
+        done
+
+    - name: Build
+      run: |
+        for target in ${{ join(matrix.targets, ' ') }}; do
+          cargo build --release --target $target
+          mv target/$target/release/wc target/$target/release/wc-$target
+        done
+
+    - name: Upload artifacts
+      uses: AButler/upload-release-assets@v3.0
+      with:
+        files: target/*/release/wc-*
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
