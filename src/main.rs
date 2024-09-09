@@ -1,10 +1,11 @@
 use std::process;
 
-mod input_processor;
 mod cmd;
+mod input_processor;
 
-fn main() {
-    if let Err(err) = cmd::run() {
+#[tokio::main]
+async fn main() {
+    if let Err(err) = cmd::run().await {
         eprintln!("Error: {}", err);
         process::exit(1);
     }

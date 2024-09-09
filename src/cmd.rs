@@ -1,6 +1,6 @@
-use std::fs::File;
-use std::io::{self, BufReader};
-use clap::{Parser, CommandFactory};  // Add CommandFactory here
+use clap::{CommandFactory, Parser};
+use tokio::fs::File;
+use tokio::io::{self, BufReader};
 
 use crate::input_processor::{process_input, CountOptions};
 
@@ -59,23 +59,23 @@ impl Cli {
     }
 }
 
-pub fn run() -> io::Result<()> {
+pub async fn run() -> io::Result<()> {
     let (cli, options) = Cli::parse_args();
 
-    let mut stdout = io::stdout();
+    let mut stdout = tokio::io::stdout();
 
     if cli.files.is_empty() {
-        let stdin = io::stdin();
-        let mut handle = stdin.lock();
-        if let Err(err) = process_input(&mut handle, &mut stdout, &options) {
+        let stdin = tokio::io::stdin();
+        let mut reader = BufReader::new(stdin);
+        if let Err(err) = process_input(&mut reader, &mut stdout, &options).await {
             eprintln!("Error processing stdin: {}", err);
         }
     } else {
         for filename in cli.files {
-            match File::open(&filename) {
+            match File::open(&filename).await {
                 Ok(file) => {
                     let mut reader = BufReader::new(file);
-                    if let Err(err) = process_input(&mut reader, &mut stdout, &options) {
+                    if let Err(err) = process_input(&mut reader, &mut stdout, &options).await {
                         eprintln!("Error processing file '{}': {}", filename, err);
                     }
                 }
