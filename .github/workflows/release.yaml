@@ -49,11 +49,11 @@ jobs:
       run: |
         for target in ${{ join(matrix.targets, ' ') }}; do
           cargo build --release --target $target
-          mv target/$target/release/wc target/$target/release/wc-$target
+          mv target/$target/release/tc target/$target/release/tc-$target
         done
 
     - name: Upload artifacts
       uses: AButler/upload-release-assets@v3.0
       with:
-        files: target/*/release/wc-*
+        files: target/*/release/tc-*
         repo-token: ${{ secrets.GITHUB_TOKEN }}

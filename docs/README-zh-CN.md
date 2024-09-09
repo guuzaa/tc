@@ -1,17 +1,18 @@
-# 📊 Rust 字数统计工具 (wc) 🦀
+# 📊 Rust 标记计数工具 (tc) 🦀
 
-一个用 Rust 编写的简单高效的字数统计程序！🚀
+一个用 Rust 编写的简单高效的标记计数程序！🚀
 
 [English](../README.md) | 简体中文 | [繁體中文](README-zh-TW.md) | [日本語](README-ja-JP.md) | [한국어](README-ko-KR.md) | [Deutsch](README-de-DE.md)
 ## 📝 描述
 
-这个 Rust 实现的经典 `wc`（字数统计）命令行工具可以统计文本文件或标准输入中的行数、单词数和字符数。它快速、可靠，并且支持 Unicode！🌍✨
+这个 Rust 实现的经典 `tc`（标记计数）命令行工具可以统计文本文件或标准输入中的行数、单词数和字符数。它快速、可靠，并且支持 Unicode！🌍✨
 
 ## 🎯 特性
 
 - 统计行数 📏
 - 统计单词数 🔤
 - 统计字符数（包括多字节 Unicode 字符）🔡
+- 统计标记数（尚未准备就绪）🔤
 - 处理多个文件 📚
 - 从标准输入读取 🖥️
 - 支持多种语言（英语、韩语、日语等）🌐
@@ -22,8 +23,8 @@
 
 2. 克隆此仓库：
    ```
-   git clone https://github.com/guuzaa/wc.rs.git
-   cd wc.rs
+   git clone https://github.com/guuzaa/tc.git
+   cd tc
    ```
 
 3. 构建项目：
@@ -31,7 +32,7 @@
    cargo build --release
    ```
 
-4. 可执行文件将位于 `target/release/wc`
+4. 可执行文件将位于 `target/release/tc`
 
 ## 🚀 使用方法
 
@@ -47,22 +48,22 @@
 
 1. 统计文件中的行数、单词数和字符数：
    ```
-   ./wc example.txt
+   ./tc example.txt
    ```
 
 2. 仅统计多个文件中的单词数：
    ```
-   ./wc -w file1.txt file2.txt file3.txt
+   ./tc -w file1.txt file2.txt file3.txt
    ```
 
 3. 从标准输入统计行数和字符数：
    ```
-   echo "你好，世界！" | ./wc -l -c
+   echo "你好，世界！" | ./tc -l -c
    ```
 
 4. 统计不同语言文件中的所有内容：
    ```
-   ./wc english.txt korean.txt japanese.txt
+   ./tc english.txt korean.txt japanese.txt
    ```
 
 ## 🧪 运行测试
@@ -84,7 +85,7 @@ cargo test
 ## 🙏 致谢
 
 - Rust 社区提供的优秀工具和支持 🦀❤️
-- 原始 Unix `wc` 命令的灵感 🖥️
+- 原始 Unix `tc` 命令的灵感 🖥️
 - Cursor 编辑器 🤖
 
 开始愉快的统计吧！🎉📊🚀

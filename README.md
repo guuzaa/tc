@@ -1,18 +1,19 @@
-# 📊 Rust Word Count (wc) 🦀
+# 📊 Rust Token Count (tc) 🦀
 
-A simple and efficient word count program written in Rust! 🚀
+A simple and efficient token count program written in Rust! 🚀
 
 English | [简体中文](docs/README-zh-CN.md) | [繁體中文](docs/README-zh-TW.md) | [日本語](docs/README-ja-JP.md) | [한국어](docs/README-ko-KR.md) | [Deutsch](docs/README-de-DE.md)
 
 ## 📝 Description
 
-This Rust implementation of the classic `wc` (word count) command-line tool allows you to count lines, words, and characters in text files or from standard input. It's fast, reliable, and supports Unicode! 🌍✨
+This Rust implementation of the classic `tc` (token count) command-line tool allows you to count lines, words, and characters in text files or from standard input. It's fast, reliable, and supports Unicode! 🌍✨
 
 ## 🎯 Features
 
 - Count lines 📏
 - Count words 🔤
 - Count characters (including multi-byte Unicode characters) 🔡
+- Count tokens (not ready yet) 🔤
 - Process multiple files 📚
 - Read from standard input 🖥️
 - Supports various languages (English, Korean, Japanese, and more!) 🌐
@@ -23,8 +24,8 @@ This Rust implementation of the classic `wc` (word count) command-line tool allo
 
 2. Clone this repository:
    ```
-   git clone https://github.com/guuzaa/wc.rs.git
-   cd wc.rs
+   git clone https://github.com/guuzaa/tc.git
+   cd tc
    ```
 
 3. Build the project:
@@ -32,7 +33,7 @@ This Rust implementation of the classic `wc` (word count) command-line tool allo
    cargo build --release
    ```
 
-4. The executable will be available at `target/release/wc`
+4. The executable will be available at `target/release/tc`
 
 ## 🚀 Usage
 
@@ -48,22 +49,22 @@ If no options are specified, all counts (lines, words, and characters) will be s
 
 1. Count lines, words, and characters in a file:
    ```
-   ./wc example.txt
+   ./tc example.txt
    ```
 
 2. Count only words in multiple files:
    ```
-   ./wc -w file1.txt file2.txt file3.txt
+   ./tc -w file1.txt file2.txt file3.txt
    ```
 
 3. Count lines and characters from standard input:
    ```
-   echo "Hello, World!" | ./wc -l -c
+   echo "Hello, World!" | ./tc -l -c
    ```
 
 4. Count everything in files with different languages:
    ```
-   ./wc english.txt korean.txt japanese.txt
+   ./tc english.txt korean.txt japanese.txt
    ```
 
 ## 🧪 Running Tests
@@ -84,7 +85,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 🙏 Acknowledgements
 
 - The Rust community for their amazing tools and support 🦀❤️
-- The original Unix `wc` command for inspiration 🖥️
+- The original Unix `tc` command for inspiration 🖥️
 - The editor Cursor 🤖
 
 Happy counting! 🎉📊🚀

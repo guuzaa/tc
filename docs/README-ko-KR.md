@@ -1,17 +1,18 @@
-# 📊 Rust 단어 수 세기 프로그램 (wc) 🦀
+# 📊 Rust 토큰 카운트 프로그램 (tc) 🦀
 
-Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니다! 🚀
+Rust로 작성된 간단하고 효율적인 토큰 카운트 프로그램입니다! 🚀
 
 [English](../README.md) | [简体中文](README-zh-CN.md) | [繁體中文](README-zh-TW.md) | [日本語](README-ja-JP.md) | 한국어 | [Deutsch](README-de-DE.md)
 ## 📝 설명
 
-이 Rust로 구현된 고전적인 `wc` (단어 수 세기) 명령줄 도구는 텍스트 파일이나 표준 입력에서 줄 수, 단어 수, 문자 수를 세는 기능을 제공합니다. 빠르고 안정적이며 유니코드를 지원합니다! 🌍✨
+이 Rust로 구현된 고전적인 `tc` (토큰 카운트) 명령줄 도구는 텍스트 파일이나 표준 입력에서 줄 수, 단어 수, 문자 수를 세는 기능을 제공합니다. 빠르고 안정적이며 유니코드를 지원합니다! 🌍✨
 
 ## 🎯 기능
 
 - 줄 수 세기 📏
 - 단어 수 세기 🔤
 - 문자 수 세기 (다중 바이트 유니코드 문자 포함) 🔡
+- 토큰 수 세기 (아직 준비되지 않음) 🔤
 - 여러 파일 처리 📚
 - 표준 입력에서 읽기 🖥️
 - 다양한 언어 지원 (영어, 한국어, 일본어 등!) 🌐
@@ -22,8 +23,8 @@ Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니
 
 2. 이 저장소를 클론하세요:
    ```
-   git clone https://github.com/guuzaa/wc.rs.git
-   cd wc.rs
+   git clone https://github.com/guuzaa/tc.git
+   cd tc
    ```
 
 3. 프로젝트를 빌드하세요:
@@ -31,7 +32,7 @@ Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니
    cargo build --release
    ```
 
-4. 실행 파일은 `target/release/wc`에 위치합니다
+4. 실행 파일은 `target/release/tc`에 위치합니다
 
 ## 🚀 사용법
 
@@ -47,22 +48,22 @@ Rust로 작성된 간단하고 효율적인 단어 수 세기 프로그램입니
 
 1. 파일의 줄 수, 단어 수, 문자 수 세기:
    ```
-   ./wc example.txt
+   ./tc example.txt
    ```
 
 2. 여러 파일의 단어 수만 세기:
    ```
-   ./wc -w file1.txt file2.txt file3.txt
+   ./tc -w file1.txt file2.txt file3.txt
    ```
 
 3. 표준 입력에서 줄 수와 문자 수 세기:
    ```
-   echo "안녕하세요, 세상!" | ./wc -l -c
+   echo "안녕하세요, 세상!" | ./tc -l -c
    ```
 
 4. 다양한 언어로 된 파일의 모든 수 세기:
    ```
-   ./wc english.txt korean.txt japanese.txt
+   ./tc english.txt korean.txt japanese.txt
    ```
 
 ## 🧪 테스트 실행
@@ -83,7 +84,7 @@ cargo test
 ## 🙏 감사의 말
 
 - 놀라운 도구와 지원을 제공해 주신 Rust 커뮤니티에 감사드립니다 🦀❤️
-- 영감을 준 원래의 Unix `wc` 명령어에 감사드립니다 🖥️
+- 영감을 준 원래의 Unix `tc` 명령어에 감사드립니다 🖥️
 - Cursor 에디터에 감사드립니다 🤖
 
 즐거운 카운팅 되세요! 🎉📊🚀

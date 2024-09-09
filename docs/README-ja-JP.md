@@ -1,18 +1,19 @@
-# 📊 Rust 単語カウントツール (wc) 🦀
+# 📊 Rust トークンカウントツール (tc) 🦀
 
-Rustで書かれたシンプルで効率的な単語カウントプログラム！🚀
+Rustで書かれたシンプルで効率的なトークンカウントプログラム！🚀
 
 [English](../README.md) | [简体中文](README-zh-CN.md) | [繁體中文](README-zh-TW.md) | 日本語 | [한국어](README-ko-KR.md) | [Deutsch](README-de-DE.md)
 
 ## 📝 説明
 
-この Rust 実装の古典的な `wc`（単語カウント）コマンドラインツールは、テキストファイルや標準入力の行数、単語数、文字数をカウントできます。高速で信頼性が高く、Unicodeをサポートしています！🌍✨
+この Rust 実装の古典的な `tc`（トークンカウント）コマンドラインツールは、テキストファイルや標準入力の行数、単語数、文字数をカウントできます。高速で信頼性が高く、Unicodeをサポートしています！🌍✨
 
 ## 🎯 特徴
 
 - 行数のカウント 📏
 - 単語数のカウント 🔤
 - 文字数のカウント（マルチバイトUnicode文字を含む）🔡
+- トークン数のカウント（まだ準備中）🔤
 - 複数のファイルを処理 📚
 - 標準入力からの読み取り 🖥️
 - 様々な言語をサポート（英語、韓国語、日本語など）🌐
@@ -23,8 +24,8 @@ Rustで書かれたシンプルで効率的な単語カウントプログラム�
 
 2. このリポジトリをクローンします：
    ```
-   git clone https://github.com/guuzaa/wc.rs.git
-   cd wc.rs
+   git clone https://github.com/guuzaa/tc.git
+   cd tc
    ```
 
 3. プロジェクトをビルドします：
@@ -32,7 +33,7 @@ Rustで書かれたシンプルで効率的な単語カウントプログラム�
    cargo build --release
    ```
 
-4. 実行可能ファイルは `target/release/wc` にあります
+4. 実行可能ファイルは `target/release/tc` にあります
 
 ## 🚀 使用方法
 
@@ -48,22 +49,22 @@ Rustで書かれたシンプルで効率的な単語カウントプログラム�
 
 1. ファイル内の行数、単語数、文字数をカウント：
    ```
-   ./wc example.txt
+   ./tc example.txt
    ```
 
 2. 複数のファイルの単語数のみをカウント：
    ```
-   ./wc -w file1.txt file2.txt file3.txt
+   ./tc -w file1.txt file2.txt file3.txt
    ```
 
 3. 標準入力から行数と文字数をカウント：
    ```
-   echo "こんにちは、世界！" | ./wc -l -c
+   echo "こんにちは、世界！" | ./tc -l -c
    ```
 
 4. 異なる言語のファイルですべてをカウント：
    ```
-   ./wc english.txt korean.txt japanese.txt
+   ./tc english.txt korean.txt japanese.txt
    ```
 
 ## 🧪 テストの実行
@@ -84,7 +85,7 @@ cargo test
 ## 🙏 謝辞
 
 - 素晴らしいツールとサポートを提供してくれる Rust コミュニティ 🦀❤️
-- インスピレーションを与えてくれた元の Unix `wc` コマンド 🖥️
+- インスピレーションを与えてくれた元の Unix `tc` コマンド 🖥️
 - Cursor エディタ 🤖
 
 楽しくカウントしましょう！🎉📊🚀

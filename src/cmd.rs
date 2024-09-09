@@ -8,7 +8,7 @@ use crate::input_processor::{process_input, CountOptions};
 #[command(
     author,
     version,
-    about = "A simple word count program by Rust and Cursor"
+    about = "A simple token count program by Rust and Cursor"
 )]
 pub struct Cli {
     /// Show line count

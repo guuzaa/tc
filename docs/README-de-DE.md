@@ -1,4 +1,4 @@
-# 📊 Rust Wortzählprogramm (wc) 🦀
+# 📊 Rust Wortzählprogramm (tc) 🦀
 
 Ein einfaches und effizientes Wortzählprogramm, geschrieben in Rust! 🚀
 
@@ -6,7 +6,7 @@ Ein einfaches und effizientes Wortzählprogramm, geschrieben in Rust! 🚀
 
 ## 📝 Beschreibung
 
-Diese Rust-Implementierung des klassischen `wc` (Wortzählung) Kommandozeilenwerkzeugs ermöglicht es Ihnen, Zeilen, Wörter und Zeichen in Textdateien oder aus der Standardeingabe zu zählen. Es ist schnell, zuverlässig und unterstützt Unicode! 🌍✨
+Diese Rust-Implementierung des klassischen `tc` (Wortzählung) Kommandozeilenwerkzeugs ermöglicht es Ihnen, Zeilen, Wörter und Zeichen in Textdateien oder aus der Standardeingabe zu zählen. Es ist schnell, zuverlässig und unterstützt Unicode! 🌍✨
 
 ## 🎯 Funktionen
 
@@ -23,8 +23,8 @@ Diese Rust-Implementierung des klassischen `wc` (Wortzählung) Kommandozeilenwer
 
 2. Klonen Sie dieses Repository:
    ```
-   git clone https://github.com/guuzaa/wc.rs.git
-   cd wc.rs
+   git clone https://github.com/guuzaa/tc.git
+   cd tc
    ```
 
 3. Bauen Sie das Projekt:
@@ -32,7 +32,7 @@ Diese Rust-Implementierung des klassischen `wc` (Wortzählung) Kommandozeilenwer
    cargo build --release
    ```
 
-4. Die ausführbare Datei finden Sie unter `target/release/wc`
+4. Die ausführbare Datei finden Sie unter `target/release/tc`
 
 ## 🚀 Verwendung
 
@@ -48,22 +48,22 @@ Wenn keine Optionen angegeben werden, werden alle Zählungen (Zeilen, Wörter un
 
 1. Zähle Zeilen, Wörter und Zeichen in einer Datei:
    ```
-   ./wc beispiel.txt
+   ./tc beispiel.txt
    ```
 
 2. Zähle nur Wörter in mehreren Dateien:
    ```
-   ./wc -w datei1.txt datei2.txt datei3.txt
+   ./tc -w datei1.txt datei2.txt datei3.txt
    ```
 
 3. Zähle Zeilen und Zeichen aus der Standardeingabe:
    ```
-   echo "Hallo, Welt!" | ./wc -l -c
+   echo "Hallo, Welt!" | ./tc -l -c
    ```
 
 4. Zähle alles in Dateien mit verschiedenen Sprachen:
    ```
-   ./wc englisch.txt koreanisch.txt japanisch.txt
+   ./tc englisch.txt koreanisch.txt japanisch.txt
    ```
 
 ## 🧪 Tests ausführen
@@ -84,7 +84,7 @@ Dieses Projekt ist unter der MIT-Lizenz lizenziert. Weitere Details finden Sie i
 ## 🙏 Danksagungen
 
 - Der Rust-Community für ihre erstaunlichen Werkzeuge und Unterstützung 🦀❤️
-- Dem ursprünglichen Unix `wc`-Befehl für die Inspiration 🖥️
+- Dem ursprünglichen Unix `tc`-Befehl für die Inspiration 🖥️
 - Dem Cursor-Editor 🤖
 
 Viel Spaß beim Zählen! 🎉📊🚀
