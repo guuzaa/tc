@@ -1,15 +1,11 @@
 use clap::{CommandFactory, Parser};
-use tokio::fs::File;
-use tokio::io::{self, BufReader};
+use std::fs::File;
+use std::io::{self, BufReader};
 
 use crate::input_processor::{process_input, CountOptions};
 
 #[derive(Parser)]
-#[command(
-    author,
-    version,
-    about = "A simple token count program by Rust and Cursor"
-)]
+#[command(author, version, about = "A simple count program by Rust and Cursor")]
 pub struct Cli {
     /// Show line count
     #[arg(short = 'l', long)]
@@ -59,23 +55,22 @@ impl Cli {
     }
 }
 
-pub async fn run() -> io::Result<()> {
+pub fn run() -> io::Result<()> {
     let (cli, options) = Cli::parse_args();
 
-    let mut stdout = tokio::io::stdout();
+    let mut stdout = io::stdout();
 
     if cli.files.is_empty() {
-        let stdin = tokio::io::stdin();
-        let mut reader = BufReader::new(stdin);
-        if let Err(err) = process_input(&mut reader, &mut stdout, &options).await {
+        let stdin = io::stdin();
+        let mut reader = BufReader::new(stdin.lock());
+        if let Err(err) = process_input(&mut reader, &mut stdout, &options) {
             eprintln!("Error processing stdin: {}", err);
         }
     } else {
         for filename in cli.files {
-            match File::open(&filename).await {
-                Ok(file) => {
-                    let mut reader = BufReader::new(file);
-                    if let Err(err) = process_input(&mut reader, &mut stdout, &options).await {
+            match File::open(&filename) {
+                Ok(mut file) => {
+                    if let Err(err) = process_input(&mut file, &mut stdout, &options) {
                         eprintln!("Error processing file '{}': {}", filename, err);
                     }
                 }
