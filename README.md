@@ -6,14 +6,14 @@ English | [简体中文](docs/README-zh-CN.md) | [繁體中文](docs/README-zh-T
 
 ## 📝 Description
 
-This Rust implementation of the classic `tc` (token count) command-line tool allows you to count lines, words, and characters in text files or from standard input. It's fast, reliable, and supports Unicode! 🌍✨
+This Rust implementation of the classic `wc` (word count) command-line tool allows you to count lines, words, characters, and even tokens in text files or from standard input. It's fast, reliable, and supports Unicode! 🌍✨
 
 ## 🎯 Features
 
 - Count lines 📏
 - Count words 🔤
 - Count characters (including multi-byte Unicode characters) 🔡
-- Count tokens (not ready yet) 🔤
+- Count tokens using various tokenizer models 🔢
 - Process multiple files 📚
 - Read from standard input 🖥️
 - Supports various languages (English, Korean, Japanese, and more!) 🌐
@@ -42,8 +42,17 @@ This Rust implementation of the classic `tc` (token count) command-line tool all
 - `-l, --lines`: Show line count 📏
 - `-w, --words`: Show word count 🔤
 - `-c, --chars`: Show character count 🔡
+- `-t, --tokens`: Show token count 🔢
+- `--model <MODEL>`: Choose tokenizer model (default: gpt3)
 
-If no options are specified, all counts (lines, words, and characters) will be shown.
+Available models:
+- `gpt3`: r50k_base
+- `edit`: p50k_edit
+- `code`: p50k_base
+- `chatgpt`: cl100k_base
+- `gpt4o`: o200k_base
+
+If no options are specified, all counts (lines, words, characters, and tokens) will be shown.
 
 ### Examples:
 
@@ -59,10 +68,15 @@ If no options are specified, all counts (lines, words, and characters) will be s
 
 3. Count lines and characters from standard input:
    ```
-   echo "Hello, World!" | ./tc -l -c
+   echo "Hello, World!" | ./tc -lc
    ```
 
-4. Count everything in files with different languages:
+4. Count tokens using the ChatGPT tokenizer:
+   ```
+   ./tc -t --model chatgpt example.txt
+   ```
+
+5. Count everything in files with different languages:
    ```
    ./tc english.txt korean.txt japanese.txt
    ```
