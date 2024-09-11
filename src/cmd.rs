@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use std::fs::File;
 use std::io::{self, BufReader};
 
@@ -23,9 +23,29 @@ pub struct Cli {
     #[arg(short = 't', long)]
     tokens: bool,
 
+    /// Choose tokenizer model
+    #[arg(long, value_enum, default_value = "gpt3")]
+    #[clap(long_help = "Choose tokenizer model:
+gpt3    -> r50k_base
+edit    -> p50k_edit
+code    -> p50k_base
+chatgpt -> cl100k_base
+gpt4o   -> o200k_base")]
+    model: Option<TokenizerModel>,
+
     /// Input files
     #[arg(name = "FILE")]
     files: Vec<String>,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
+pub enum TokenizerModel {
+    GPT3,
+    Edit,
+    Code,
+    #[clap(name = "chatgpt")]
+    ChatGPT,
+    GPT4O,
 }
 
 impl Cli {
@@ -37,6 +57,7 @@ impl Cli {
             show_words: cli.words,
             show_bytes: cli.chars,
             show_tokens: cli.tokens,
+            tokenizer_model: cli.model.unwrap_or(TokenizerModel::GPT3),
         };
 
         // If no options are specified, show all
@@ -50,6 +71,7 @@ impl Cli {
                 show_words: true,
                 show_bytes: true,
                 show_tokens: true,
+                tokenizer_model: options.tokenizer_model,
             }
         } else {
             options
