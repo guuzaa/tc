@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build Release
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
         include:
@@ -75,3 +77,4 @@ jobs:
       with:
         files: target/*/release/tc-*
         repo-token: ${{ secrets.GITHUB_TOKEN }}
+        release-tag: ${{ github.ref_name }}
