@@ -1,4 +1,4 @@
-use clap::{CommandFactory, Parser};
+use clap::Parser;
 use std::fs::File;
 use std::io::{self, BufReader};
 
@@ -19,6 +19,10 @@ pub struct Cli {
     #[arg(short = 'c', long)]
     chars: bool,
 
+    /// Show token count
+    #[arg(short = 't', long)]
+    tokens: bool,
+
     /// Input files
     #[arg(name = "FILE")]
     files: Vec<String>,
@@ -28,24 +32,24 @@ impl Cli {
     fn parse_args() -> (Self, CountOptions) {
         let cli = Self::parse();
 
-        // If no arguments are provided, print help and exit
-        if cli.files.is_empty() && !cli.lines && !cli.words && !cli.chars {
-            Self::command().print_help().unwrap();
-            std::process::exit(0);
-        }
-
         let options = CountOptions {
             show_lines: cli.lines,
             show_words: cli.words,
             show_bytes: cli.chars,
+            show_tokens: cli.tokens,
         };
 
         // If no options are specified, show all
-        let options = if !options.show_lines && !options.show_words && !options.show_bytes {
+        let options = if !options.show_lines
+            && !options.show_words
+            && !options.show_bytes
+            && !options.show_tokens
+        {
             CountOptions {
                 show_lines: true,
                 show_words: true,
                 show_bytes: true,
+                show_tokens: true,
             }
         } else {
             options

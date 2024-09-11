@@ -1,9 +1,11 @@
 use std::io::{self, Read, Write};
+use tiktoken_rs::cl100k_base;
 
 pub struct CountOptions {
     pub show_lines: bool,
     pub show_words: bool,
     pub show_bytes: bool,
+    pub show_tokens: bool,
 }
 
 pub fn process_input<R, W>(reader: &mut R, writer: &mut W, options: &CountOptions) -> io::Result<()>
@@ -14,7 +16,7 @@ where
     let mut buffer = Vec::new();
     reader.read_to_end(&mut buffer)?;
 
-    let char_count = String::from_utf8_lossy(&buffer).chars().count();
+    let buffer_string = String::from_utf8_lossy(&buffer);
     let mut line_count = 0;
     let mut word_count = 0;
 
@@ -25,23 +27,32 @@ where
         if lines_iter.peek().is_none() && line.is_empty() {
             break;
         }
-
-        line_count += 1;
-        word_count += line
-            .split(|&b| b.is_ascii_whitespace())
-            .filter(|&w| !w.is_empty())
-            .count();
+        if options.show_lines {
+            line_count += 1;
+        }
+        if options.show_words {
+            word_count += line
+                .split(|&b| b.is_ascii_whitespace())
+                .filter(|&w| !w.is_empty())
+                .count();
+        }
     }
 
     let mut output = String::new();
     if options.show_lines {
-        output.push_str(&format!("{:7}", line_count));
+        output.push_str(&format!("{:8}", line_count));
     }
     if options.show_words {
         output.push_str(&format!("{:8}", word_count));
     }
     if options.show_bytes {
+        let char_count = buffer_string.chars().count();
         output.push_str(&format!("{:8}", char_count));
+    }
+    if options.show_tokens {
+        let bpe = cl100k_base().unwrap();
+        let token_count = bpe.encode_ordinary(&buffer_string).len();
+        output.push_str(&format!("{:8}", token_count));
     }
 
     writer.write_all(output.as_bytes())?;
@@ -49,7 +60,6 @@ where
     Ok(())
 }
 
-// Update tests to remove token counting
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -64,9 +74,10 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
-        assert_eq!(output, b"      0       0       0\n");
+        assert_eq!(output, b"       0       0       0\n");
     }
 
     #[test]
@@ -78,11 +89,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       1       5\n"
+            "       1       1       5\n"
         );
     }
 
@@ -95,11 +107,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      2       5      25\n"
+            "       2       5      25\n"
         );
     }
 
@@ -112,9 +125,10 @@ mod tests {
             show_lines: true,
             show_words: false,
             show_bytes: false,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
-        assert_eq!(String::from_utf8(output).unwrap(), "      2\n");
+        assert_eq!(String::from_utf8(output).unwrap(), "       2\n");
     }
 
     #[test]
@@ -126,6 +140,7 @@ mod tests {
             show_lines: false,
             show_words: true,
             show_bytes: false,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "       3\n");
@@ -140,6 +155,7 @@ mod tests {
             show_lines: false,
             show_words: false,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "       6\n");
@@ -154,11 +170,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       2      11\n"
+            "       1       2      11\n"
         );
     }
 
@@ -171,11 +188,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       3       9\n"
+            "       1       3       9\n"
         );
     }
 
@@ -188,11 +206,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       2      10\n"
+            "       1       2      10\n"
         );
     }
 
@@ -205,11 +224,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       2      10\n"
+            "       1       2      10\n"
         );
     }
 
@@ -222,11 +242,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      1       4      22\n"
+            "       1       4      22\n"
         );
     }
 
@@ -239,11 +260,12 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      2       2      12\n"
+            "       2       2      12\n"
         );
     }
 
@@ -256,11 +278,45 @@ mod tests {
             show_lines: true,
             show_words: true,
             show_bytes: true,
+            show_tokens: false,
         };
         process_input(&mut reader, &mut output, &options).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            "      2       2      11\n"
+            "       2       2      11\n"
+        );
+    }
+
+    #[test]
+    fn test_show_tokens() {
+        let input = b"Hello, world!";
+        let mut reader = Cursor::new(&input[..]);
+        let mut output = Vec::new();
+        let options = CountOptions {
+            show_lines: false,
+            show_words: false,
+            show_bytes: false,
+            show_tokens: true,
+        };
+        process_input(&mut reader, &mut output, &options).unwrap();
+        assert_eq!(String::from_utf8(output).unwrap(), "       4\n");
+    }
+
+    #[test]
+    fn test_all_options() {
+        let input = b"Hello, world!\nThis is a test.";
+        let mut reader = Cursor::new(&input[..]);
+        let mut output = Vec::new();
+        let options = CountOptions {
+            show_lines: true,
+            show_words: true,
+            show_bytes: true,
+            show_tokens: true,
+        };
+        process_input(&mut reader, &mut output, &options).unwrap();
+        assert_eq!(
+            String::from_utf8(output).unwrap(),
+            "       2       6      29       9\n"
         );
     }
 }
