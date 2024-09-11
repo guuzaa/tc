@@ -1,6 +1,6 @@
-use std::io::{self, Read, Write};
-use tiktoken_rs::{cl100k_base, p50k_base, p50k_edit, r50k_base, o200k_base};
 use crate::cmd::TokenizerModel;
+use std::io::{self, Read, Write};
+use tiktoken_rs::{cl100k_base, o200k_base, p50k_base, p50k_edit, r50k_base};
 
 pub struct CountOptions {
     pub show_lines: bool,
@@ -52,13 +52,14 @@ where
         output.push_str(&format!("{:8}", char_count));
     }
     if options.show_tokens {
-        let token_count = match options.tokenizer_model {
-            TokenizerModel::GPT3 => r50k_base().unwrap().encode_ordinary(&buffer_string).len(),
-            TokenizerModel::Edit => p50k_edit().unwrap().encode_ordinary(&buffer_string).len(),
-            TokenizerModel::Code => p50k_base().unwrap().encode_ordinary(&buffer_string).len(),
-            TokenizerModel::ChatGPT => cl100k_base().unwrap().encode_ordinary(&buffer_string).len(),
-            TokenizerModel::GPT4O => o200k_base().unwrap().encode_ordinary(&buffer_string).len(),
+        let tokenizer = match options.tokenizer_model {
+            TokenizerModel::GPT3 => r50k_base().unwrap(),
+            TokenizerModel::Edit => p50k_edit().unwrap(),
+            TokenizerModel::Code => p50k_base().unwrap(),
+            TokenizerModel::ChatGPT => cl100k_base().unwrap(),
+            TokenizerModel::GPT4O => o200k_base().unwrap(),
         };
+        let token_count = tokenizer.encode_ordinary(&buffer_string).len();
         output.push_str(&format!("{:8}", token_count));
     }
 
