@@ -104,6 +104,6 @@ jobs:
       - name: Upload artifacts
         uses: AButler/upload-release-assets@v3.0
         with:
-          files: target/*/release/tc-*.tar.gz | target/*/release/tc-*.zip
+          files: ${{ matrix.name }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: ${{ github.ref_name }}
