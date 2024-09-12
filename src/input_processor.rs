@@ -19,14 +19,29 @@ impl CountOptions {
     }
 }
 
-struct InputCounts {
-    lines: usize,
-    words: usize,
-    bytes: usize,
-    tokens: usize,
+#[derive(Default)]
+pub struct InputCounts {
+    pub lines: usize,
+    pub words: usize,
+    pub bytes: usize,
+    pub tokens: usize,
 }
 
-pub fn process_input<R, W>(reader: &mut R, writer: &mut W, options: &CountOptions) -> io::Result<()>
+impl std::ops::AddAssign for InputCounts {
+    fn add_assign(&mut self, other: Self) {
+        self.lines += other.lines;
+        self.words += other.words;
+        self.bytes += other.bytes;
+        self.tokens += other.tokens;
+    }
+}
+
+pub fn process_input<R, W>(
+    reader: &mut R,
+    writer: &mut W,
+    options: &CountOptions,
+    filename: Option<&str>,
+) -> io::Result<InputCounts>
 where
     R: Read,
     W: Write,
@@ -35,7 +50,8 @@ where
     reader.read_to_end(&mut buffer)?;
 
     let counts = count_input(&buffer, options);
-    print_counts(writer, &counts, options)
+    print_counts(writer, &counts, options, filename)?;
+    Ok(counts)
 }
 
 fn count_input(buffer: &[u8], options: &CountOptions) -> InputCounts {
@@ -86,10 +102,11 @@ fn count_input(buffer: &[u8], options: &CountOptions) -> InputCounts {
     }
 }
 
-fn print_counts<W: Write>(
+pub fn print_counts<W: Write>(
     writer: &mut W,
     counts: &InputCounts,
     options: &CountOptions,
+    filename: Option<&str>,
 ) -> io::Result<()> {
     let mut output = String::new();
     let format_len = if options.count_enabled_options() == 1 {
@@ -111,9 +128,11 @@ fn print_counts<W: Write>(
         output.push_str(&format!("{:format_len$}", counts.tokens));
     }
 
-    writer.write_all(output.as_bytes())?;
-    writer.write_all(b"\n")?;
-    Ok(())
+    if let Some(name) = filename {
+        output.push_str(&format!(" {}", name));
+    }
+
+    writeln!(writer, "{}", output.trim_end())
 }
 
 #[cfg(test)]
@@ -133,7 +152,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(output, b"       0       0       0\n");
     }
 
@@ -149,7 +168,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       1       5\n"
@@ -168,7 +187,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       2       5      25\n"
@@ -187,7 +206,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "2\n");
     }
 
@@ -203,7 +222,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "3\n");
     }
 
@@ -219,7 +238,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "6\n");
     }
 
@@ -235,7 +254,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       2      11\n"
@@ -254,7 +273,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       3       9\n"
@@ -273,7 +292,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       2      10\n"
@@ -292,7 +311,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       2      10\n"
@@ -311,7 +330,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       1       4      22\n"
@@ -330,7 +349,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       2       2      12\n"
@@ -349,7 +368,7 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       2       2      11\n"
@@ -368,7 +387,7 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::Edit,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "11\n");
     }
 
@@ -384,7 +403,7 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       2       6      29      10\n"
@@ -403,7 +422,7 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "4\n");
 
         let mut reader = Cursor::new(&input[..]);
@@ -415,7 +434,7 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(String::from_utf8(output).unwrap(), "4\n");
     }
 
@@ -431,7 +450,7 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
-        process_input(&mut reader, &mut output, &options).unwrap();
+        process_input(&mut reader, &mut output, &options, None).unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
             "       2       6      29       9\n"
