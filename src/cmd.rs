@@ -2,7 +2,7 @@ use clap::{Parser, ValueEnum};
 use std::fs::File;
 use std::io::{self, BufReader};
 
-use crate::input_processor::{process_input, CountOptions};
+use crate::input_processor::{print_counts, process_input, CountOptions, InputCounts};
 
 #[derive(Parser)]
 #[command(author, version, about = "A simple count program by Rust and Cursor")]
@@ -60,12 +60,7 @@ impl Cli {
             tokenizer_model: cli.model.unwrap_or(TokenizerModel::GPT3),
         };
 
-        // If no options are specified, show all
-        let options = if !options.show_lines
-            && !options.show_words
-            && !options.show_bytes
-            && !options.show_tokens
-        {
+        let options = if options.count_enabled_options() == 0 {
             CountOptions {
                 show_lines: true,
                 show_words: true,
@@ -85,26 +80,34 @@ pub fn run() -> io::Result<()> {
     let (cli, options) = Cli::parse_args();
 
     let mut stdout = io::stdout();
+    let mut total_counts = InputCounts::default();
+    let mut file_count = 0;
 
     if cli.files.is_empty() {
         let stdin = io::stdin();
         let mut reader = BufReader::new(stdin.lock());
-        if let Err(err) = process_input(&mut reader, &mut stdout, &options) {
+        if let Err(err) = process_input(&mut reader, &mut stdout, &options, None) {
             eprintln!("Error processing stdin: {}", err);
         }
     } else {
-        for filename in cli.files {
-            match File::open(&filename) {
+        for filename in &cli.files {
+            match File::open(filename) {
                 Ok(mut file) => {
-                    if let Err(err) = process_input(&mut file, &mut stdout, &options) {
-                        eprintln!("Error processing file '{}': {}", filename, err);
+                    match process_input(&mut file, &mut stdout, &options, Some(filename)) {
+                        Ok(counts) => {
+                            total_counts += counts;
+                            file_count += 1;
+                        }
+                        Err(err) => eprintln!("Error processing file '{}': {}", filename, err),
                     }
                 }
-                Err(err) => {
-                    eprintln!("Error opening file '{}': {}", filename, err);
-                }
+                Err(err) => eprintln!("Error opening file '{}': {}", filename, err),
             }
         }
+    }
+
+    if file_count > 1 {
+        print_counts(&mut stdout, &total_counts, &options, Some("total"))?;
     }
 
     Ok(())
