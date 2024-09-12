@@ -60,12 +60,7 @@ impl Cli {
             tokenizer_model: cli.model.unwrap_or(TokenizerModel::GPT3),
         };
 
-        // If no options are specified, show all
-        let options = if !options.show_lines
-            && !options.show_words
-            && !options.show_bytes
-            && !options.show_tokens
-        {
+        let options = if options.count_enabled_options() == 0 {
             CountOptions {
                 show_lines: true,
                 show_words: true,
