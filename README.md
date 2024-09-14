@@ -20,6 +20,10 @@ This Rust implementation of the classic `wc` (word count) command-line tool allo
 
 ## 🛠️ Installation
 
+There are two ways to install tc:
+
+### Option 1: Install from source
+
 1. Make sure you have Rust installed on your system. If not, get it from [rust-lang.org](https://www.rust-lang.org/tools/install) 🦀
 
 2. Clone this repository:
@@ -34,6 +38,18 @@ This Rust implementation of the classic `wc` (word count) command-line tool allo
    ```
 
 4. The executable will be available at `target/release/tc`
+
+### Option 2: Install pre-built binaries
+
+1. Go to the [Releases page](https://github.com/guuzaa/tc/releases) of the tc repository.
+
+2. Download the latest release for your operating system and architecture.
+
+3. Extract the downloaded archive.
+
+4. Move the `tc` executable to a directory in your system's PATH (e.g., `/usr/local/bin` on Unix-like systems).
+
+5. You can now use tc from anywhere in your terminal!
 
 ## 🚀 Usage
 
@@ -58,35 +74,28 @@ If no options are specified, all counts (lines, words, characters, and tokens) w
 
 1. Count lines, words, and characters in a file:
    ```
-   ./tc example.txt
+   tc example.txt
    ```
 
 2. Count only words in multiple files:
    ```
-   ./tc -w file1.txt file2.txt file3.txt
+   tc -w file1.txt file2.txt file3.txt
    ```
 
 3. Count lines and characters from standard input:
    ```
-   echo "Hello, World!" | ./tc -lc
+   echo "Hello, World!" | tc -lc
    ```
 
 4. Count tokens using the ChatGPT tokenizer:
    ```
-   ./tc -t --model chatgpt example.txt
+   tc -t --model chatgpt example.txt
    ```
 
 5. Count everything in files with different languages:
    ```
-   ./tc english.txt korean.txt japanese.txt
+   tc english.txt korean.txt japanese.txt
    ```
-
-## 🧪 Running Tests
-
-To run the test suite, use the following command:
-```
-cargo test
-```
 
 ## 🤝 Contributing
 

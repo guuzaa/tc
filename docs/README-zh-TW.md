@@ -20,6 +20,10 @@
 
 ## 🛠️ 安裝
 
+有兩種方式安裝 tc：
+
+### 方式 1：從原始碼安裝
+
 1. 確保您的系統已安裝 Rust。如果沒有，請從 [rust-lang.org](https://www.rust-lang.org/tools/install) 獲取 🦀
 
 2. 複製此儲存庫：
@@ -34,6 +38,18 @@
    ```
 
 4. 可執行檔將位於 `target/release/tc`
+
+### 方式 2：安裝預編譯二進制檔案
+
+1. 前往 tc 儲存庫的 [Releases 頁面](https://github.com/guuzaa/tc/releases)。
+
+2. 下載適用於您的作業系統和架構的最新版本。
+
+3. 解壓下載的壓縮包。
+
+4. 將 `tc` 可執行檔移動到系統 PATH 中的目錄（例如，Unix 類系統中的 `/usr/local/bin`）。
+
+5. 現在您可以在終端機的任何位置使用 tc 了！
 
 ## 🚀 使用方法
 
@@ -58,35 +74,28 @@
 
 1. 統計檔案中的行數、單字數和字元數：
    ```
-   ./tc example.txt
+   tc example.txt
    ```
 
 2. 僅統計多個檔案中的單字數：
    ```
-   ./tc -w file1.txt file2.txt file3.txt
+   tc -w file1.txt file2.txt file3.txt
    ```
 
 3. 從標準輸入統計行數和字元數：
    ```
-   echo "你好，世界！" | ./tc -lc
+   echo "你好，世界！" | tc -lc
    ```
 
 4. 使用 ChatGPT 分詞器統計標記數：
    ```
-   ./tc -t --model chatgpt example.txt
+   tc -t --model chatgpt example.txt
    ```
 
 5. 統計不同語言檔案中的所有內容：
    ```
-   ./tc english.txt korean.txt japanese.txt
+   tc english.txt korean.txt japanese.txt
    ```
-
-## 🧪 執行測試
-
-要執行測試套件，請使用以下命令：
-```
-cargo test
-```
 
 ## 🤝 貢獻
 
