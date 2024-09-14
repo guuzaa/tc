@@ -1,4 +1,4 @@
-# 📊 Rust Token-Zählprogramm (tc) 🦀
+# 📊 Token Count (tc) 🦀
 
 Ein einfaches und effizientes Token-Zählprogramm, geschrieben in Rust! 🚀
 

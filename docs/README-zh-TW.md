@@ -1,4 +1,4 @@
-# 📊 Rust 標記計數工具 (tc) 🦀
+# 📊 Token Count (tc) 🦀
 
 一個用 Rust 編寫的簡單高效的標記計數程式！🚀
 
