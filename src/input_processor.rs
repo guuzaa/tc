@@ -52,14 +52,14 @@ where
     if files.is_empty() {
         let stdin = io::stdin();
         let mut reader = BufReader::new(stdin.lock());
-        if let Err(err) = process_input(&mut reader, writer, &options, None) {
+        if let Err(err) = process_input(&mut reader, writer, options, None) {
             error_count += 1;
             eprintln!("tc: Error processing stdin: {}", err);
         }
     } else {
         for filename in files {
             match File::open(filename) {
-                Ok(mut file) => match process_input(&mut file, writer, &options, Some(filename)) {
+                Ok(mut file) => match process_input(&mut file, writer, options, Some(filename)) {
                     Ok(counts) => {
                         total_counts += counts;
                     }
@@ -78,7 +78,7 @@ where
     }
 
     if file_count > 1 {
-        print_counts(writer, &total_counts, &options, Some("total"))?;
+        print_counts(writer, &total_counts, options, Some("total"))?;
     }
 
     if error_count > 0 {

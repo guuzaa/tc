@@ -107,3 +107,41 @@ fn test_different_tokenizer_model() {
         .success()
         .stdout("       1       2      13       4\n");
 }
+
+#[test]
+fn test_error_code_without_termination() {
+    let dir = tempdir().unwrap();
+    let existing_file1 = dir.path().join("existing1.txt");
+    let existing_file2 = dir.path().join("existing2.txt");
+    let non_existent_file = dir.path().join("non_existent.txt");
+
+    // Create existing files
+    let mut file1 = File::create(&existing_file1).unwrap();
+    writeln!(file1, "This is an existing file.").unwrap();
+
+    let mut file2 = File::create(&existing_file2).unwrap();
+    writeln!(file2, "This is another existing file.").unwrap();
+
+    let mut cmd = Command::cargo_bin("tc").unwrap();
+    cmd.arg(&existing_file1)
+        .arg(&non_existent_file)
+        .arg(&existing_file2)
+        .assert()
+        .failure()
+        .code(1) // Expect an error code of 1
+        .stdout(predicate::str::contains("       1       5      26       7")) // Output for first existing file
+        .stderr(predicate::str::contains("tc: Error opening file")) // Error message for non-existent file
+        .stdout(predicate::str::contains("       1       5      31       7")) // Output for second existing file
+        .stdout(predicate::str::contains(
+            "       2      10      57      14 total",
+        )); // Total count
+
+    // Verify that the process didn't terminate early by checking if it processed both existing files
+    let output = cmd.output().unwrap();
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("existing1.txt"));
+    assert!(stdout.contains("existing2.txt"));
+    assert!(stdout.contains("total"));
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("non_existent.txt"));
+}
