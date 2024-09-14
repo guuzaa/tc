@@ -4,7 +4,7 @@ mod cmd;
 mod input_processor;
 
 fn main() {
-    if let Err(_) = cmd::run() {
+    if cmd::run().is_err() {
         process::exit(1);
     }
 }
