@@ -1,5 +1,6 @@
 use crate::cmd::TokenizerModel;
-use std::io::{self, Read, Write};
+use std::fs::File;
+use std::io::{self, BufReader, Read, Write};
 use tiktoken_rs::{cl100k_base, o200k_base, p50k_base, p50k_edit, r50k_base};
 
 pub struct CountOptions {
@@ -36,7 +37,58 @@ impl std::ops::AddAssign for InputCounts {
     }
 }
 
-pub fn process_input<R, W>(
+pub fn process_inputs<W>(
+    files: &Vec<String>,
+    writer: &mut W,
+    options: &CountOptions,
+) -> io::Result<()>
+where
+    W: Write,
+{
+    let mut total_counts = InputCounts::default();
+    let mut file_count = 0;
+    let mut error_count = 0;
+
+    if files.is_empty() {
+        let stdin = io::stdin();
+        let mut reader = BufReader::new(stdin.lock());
+        if let Err(err) = process_input(&mut reader, writer, &options, None) {
+            error_count += 1;
+            eprintln!("tc: Error processing stdin: {}", err);
+        }
+    } else {
+        for filename in files {
+            match File::open(filename) {
+                Ok(mut file) => match process_input(&mut file, writer, &options, Some(filename)) {
+                    Ok(counts) => {
+                        total_counts += counts;
+                    }
+                    Err(err) => {
+                        error_count += 1;
+                        eprintln!("tc: Error processing file '{}': {}", filename, err)
+                    }
+                },
+                Err(err) => {
+                    error_count += 1;
+                    eprintln!("tc: Error opening file '{}': {}", filename, err)
+                }
+            }
+            file_count += 1;
+        }
+    }
+
+    if file_count > 1 {
+        print_counts(writer, &total_counts, &options, Some("total"))?;
+    }
+
+    if error_count > 0 {
+        Err(io::Error::new(io::ErrorKind::Other, ""))
+    } else {
+        Ok(())
+    }
+}
+
+fn process_input<R, W>(
     reader: &mut R,
     writer: &mut W,
     options: &CountOptions,
@@ -102,7 +154,7 @@ fn count_input(buffer: &[u8], options: &CountOptions) -> InputCounts {
     }
 }
 
-pub fn print_counts<W: Write>(
+fn print_counts<W: Write>(
     writer: &mut W,
     counts: &InputCounts,
     options: &CountOptions,

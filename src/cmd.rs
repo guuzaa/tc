@@ -1,8 +1,7 @@
 use clap::{Parser, ValueEnum};
-use std::fs::File;
-use std::io::{self, BufReader};
+use std::io;
 
-use crate::input_processor::{print_counts, process_input, CountOptions, InputCounts};
+use crate::input_processor::{process_inputs, CountOptions};
 
 #[derive(Parser)]
 #[command(author, version, about = "A simple count program by Rust and Cursor")]
@@ -78,37 +77,5 @@ impl Cli {
 
 pub fn run() -> io::Result<()> {
     let (cli, options) = Cli::parse_args();
-
-    let mut stdout = io::stdout();
-    let mut total_counts = InputCounts::default();
-    let mut file_count = 0;
-
-    if cli.files.is_empty() {
-        let stdin = io::stdin();
-        let mut reader = BufReader::new(stdin.lock());
-        if let Err(err) = process_input(&mut reader, &mut stdout, &options, None) {
-            eprintln!("Error processing stdin: {}", err);
-        }
-    } else {
-        for filename in &cli.files {
-            match File::open(filename) {
-                Ok(mut file) => {
-                    match process_input(&mut file, &mut stdout, &options, Some(filename)) {
-                        Ok(counts) => {
-                            total_counts += counts;
-                            file_count += 1;
-                        }
-                        Err(err) => eprintln!("Error processing file '{}': {}", filename, err),
-                    }
-                }
-                Err(err) => eprintln!("Error opening file '{}': {}", filename, err),
-            }
-        }
-    }
-
-    if file_count > 1 {
-        print_counts(&mut stdout, &total_counts, &options, Some("total"))?;
-    }
-
-    Ok(())
+    process_inputs(&cli.files, &mut io::stdout(), &options)
 }

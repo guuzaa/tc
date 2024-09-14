@@ -75,8 +75,8 @@ fn test_non_existent_file() {
     let mut cmd = Command::cargo_bin("tc").unwrap();
     cmd.arg("non_existent_file.txt")
         .assert()
-        .success()
-        .stderr(predicate::str::contains("Error opening file"));
+        .failure()
+        .stderr(predicate::str::contains("tc: Error opening file"));
 }
 
 #[test]
