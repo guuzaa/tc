@@ -1,6 +1,7 @@
 use std::process;
 
 mod cmd;
+mod counts;
 mod input_processor;
 
 fn main() {

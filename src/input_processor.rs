@@ -1,47 +1,10 @@
 use crate::cmd::TokenizerModel;
+use crate::counts::{CountOptions, InputCounts};
 use std::fs::File;
 use std::io::{self, BufReader, Read, Write};
 use tiktoken_rs::{cl100k_base, o200k_base, p50k_base, p50k_edit, r50k_base};
 
-pub struct CountOptions {
-    pub show_lines: bool,
-    pub show_words: bool,
-    pub show_bytes: bool,
-    pub show_tokens: bool,
-    pub tokenizer_model: TokenizerModel,
-}
-
-impl CountOptions {
-    pub fn count_enabled_options(&self) -> u8 {
-        self.show_lines as u8
-            + self.show_words as u8
-            + self.show_bytes as u8
-            + self.show_tokens as u8
-    }
-}
-
-#[derive(Default)]
-pub struct InputCounts {
-    pub lines: usize,
-    pub words: usize,
-    pub bytes: usize,
-    pub tokens: usize,
-}
-
-impl std::ops::AddAssign for InputCounts {
-    fn add_assign(&mut self, other: Self) {
-        self.lines += other.lines;
-        self.words += other.words;
-        self.bytes += other.bytes;
-        self.tokens += other.tokens;
-    }
-}
-
-pub fn process_inputs<W>(
-    files: &Vec<String>,
-    writer: &mut W,
-    options: &CountOptions,
-) -> io::Result<()>
+pub fn process_inputs<W>(files: &[String], writer: &mut W, options: &CountOptions) -> io::Result<()>
 where
     W: Write,
 {

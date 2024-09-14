@@ -1,8 +1,8 @@
 use clap::{Parser, ValueEnum};
 use std::io;
 
-use crate::input_processor::{process_inputs, CountOptions};
-
+use crate::counts::CountOptions;
+use crate::input_processor::process_inputs;
 #[derive(Parser)]
 #[command(author, version, about = "A simple count program by Rust and Cursor")]
 pub struct Cli {

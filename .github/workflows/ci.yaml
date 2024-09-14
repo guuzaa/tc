@@ -25,6 +25,7 @@ jobs:
         components: rustfmt, clippy
     
     - name: Check formatting
+      if: matrix.os == 'ubuntu-latest'
       run: cargo fmt -- --check
     
     - name: Build on ${{ matrix.os }}
@@ -33,6 +34,7 @@ jobs:
     - name: Run tests on ${{ matrix.os }}
       run: cargo test --verbose
     
-    - name: Run clippy on ${{ matrix.os }}
+    - name: Run clippy
+      if: matrix.os == 'ubuntu-latest'
       run: cargo clippy -- -D warnings
 

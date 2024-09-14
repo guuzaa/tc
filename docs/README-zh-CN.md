@@ -3,6 +3,7 @@
 一个用 Rust 编写的简单高效的标记计数程序！🚀
 
 [English](../README.md) | 简体中文 | [繁體中文](README-zh-TW.md) | [日本語](README-ja-JP.md) | [한국어](README-ko-KR.md) | [Deutsch](README-de-DE.md)
+
 ## 📝 描述
 
 这个 Rust 实现的经典 `wc`（字数统计）命令行工具可以统计文本文件或标准输入中的行数、单词数、字符数，甚至是标记数。它快速、可靠，并且支持 Unicode！🌍✨
@@ -19,6 +20,10 @@
 
 ## 🛠️ 安装
 
+有两种方式安装 tc：
+
+### 方式 1：从源代码安装
+
 1. 确保您的系统已安装 Rust。如果没有，请从 [rust-lang.org](https://www.rust-lang.org/tools/install) 获取 🦀
 
 2. 克隆此仓库：
@@ -33,6 +38,18 @@
    ```
 
 4. 可执行文件将位于 `target/release/tc`
+
+### 方式 2：安装预编译二进制文件
+
+1. 前往 tc 仓库的 [Releases 页面](https://github.com/guuzaa/tc/releases)。
+
+2. 下载适用于您的操作系统和架构的最新版本。
+
+3. 解压下载的压缩包。
+
+4. 将 `tc` 可执行文件移动到系统 PATH 中的目录（例如，Unix 类系统中的 `/usr/local/bin`）。
+
+5. 现在您可以在终端的任何位置使用 tc 了！
 
 ## 🚀 使用方法
 
@@ -79,14 +96,6 @@
    ```
    ./tc english.txt korean.txt japanese.txt
    ```
-
-## 🧪 运行测试
-
-要运行测试套件，请使用以下命令：
-```
-cargo test
-```
-
 
 ## 🤝 贡献
 
