@@ -28,6 +28,14 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: cargo fmt -- --check
     
+    - name: Cargo cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+        restore-keys: |
+            ${{ runner.os }}-cargo-
+    
     - name: Build on ${{ matrix.os }}
       run: cargo build --verbose
     
