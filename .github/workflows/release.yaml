@@ -101,9 +101,21 @@ jobs:
           tar czvf ../../../${{ matrix.name }} tc
           cd -
 
+      - name: Generate SHA256 checksum [Windows]
+        if: matrix.os == 'windows-latest'
+        run: |
+          $hash = (Get-FileHash -Algorithm SHA256 ${{ matrix.name }}).Hash.ToLower()
+          $hash | Out-File -Encoding utf8 ${{ matrix.name }}.sha256
+
+      - name: Generate SHA256 checksum [-nix]
+        if: matrix.os != 'windows-latest'
+        run: shasum -a 256 ${{ matrix.name }} | cut -d ' ' -f 1 > ${{ matrix.name }}.sha256
+
       - name: Upload artifacts
         uses: AButler/upload-release-assets@v3.0
         with:
-          files: ${{ matrix.name }}
+          files: |
+            ${{ matrix.name }}
+            ${{ matrix.name }}.sha256
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: ${{ github.ref_name }}
