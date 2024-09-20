@@ -190,7 +190,7 @@ fn print_counts<W: Write>(
         output.push_str(&format!(" {}", name));
     }
 
-    if let Err(_) = writeln!(writer, "{}", output.trim_end()) {
+    if writeln!(writer, "{}", output.trim_end()).is_err() {
         Err(io::Error::new(io::ErrorKind::WriteZero, ""))
     } else {
         Ok(())

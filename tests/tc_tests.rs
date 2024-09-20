@@ -180,6 +180,7 @@ fn test_permission_denied() {
     fs::remove_file(&file_path).unwrap();
 }
 
+#[cfg(unix)]
 #[test]
 fn test_directory_counting() {
     let dir = tempdir().unwrap();
