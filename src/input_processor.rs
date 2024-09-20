@@ -137,7 +137,7 @@ fn count_input(buffer: &[u8], options: &CountOptions) -> InputCounts {
         }
     }
 
-    if options.show_bytes {
+    if options.show_chars {
         char_count = buffer_string.chars().count();
     }
 
@@ -155,7 +155,7 @@ fn count_input(buffer: &[u8], options: &CountOptions) -> InputCounts {
     InputCounts {
         lines: line_count,
         words: word_count,
-        bytes: char_count,
+        chars: char_count,
         tokens: token_count,
     }
 }
@@ -179,8 +179,8 @@ fn print_counts<W: Write>(
     if options.show_words {
         output.push_str(&format!("{:format_len$}", counts.words));
     }
-    if options.show_bytes {
-        output.push_str(&format!("{:format_len$}", counts.bytes));
+    if options.show_chars {
+        output.push_str(&format!("{:format_len$}", counts.chars));
     }
     if options.show_tokens {
         output.push_str(&format!("{:format_len$}", counts.tokens));
@@ -210,7 +210,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -226,7 +226,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -245,7 +245,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -264,7 +264,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: false,
-            show_bytes: false,
+            show_chars: false,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -280,7 +280,7 @@ mod tests {
         let options = CountOptions {
             show_lines: false,
             show_words: true,
-            show_bytes: false,
+            show_chars: false,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -289,14 +289,14 @@ mod tests {
     }
 
     #[test]
-    fn test_show_bytes_only() {
+    fn test_show_chars_only() {
         let input = b"hello\n";
         let mut reader = Cursor::new(&input[..]);
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
             show_words: false,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -312,7 +312,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -331,7 +331,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -350,7 +350,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -369,7 +369,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -388,7 +388,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -407,7 +407,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -426,7 +426,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -445,7 +445,7 @@ mod tests {
         let options = CountOptions {
             show_lines: false,
             show_words: false,
-            show_bytes: false,
+            show_chars: false,
             show_tokens: true,
             tokenizer_model: TokenizerModel::Edit,
         };
@@ -461,7 +461,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -480,7 +480,7 @@ mod tests {
         let options = CountOptions {
             show_lines: false,
             show_words: false,
-            show_bytes: false,
+            show_chars: false,
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
@@ -492,7 +492,7 @@ mod tests {
         let options = CountOptions {
             show_lines: false,
             show_words: false,
-            show_bytes: false,
+            show_chars: false,
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
@@ -508,7 +508,7 @@ mod tests {
         let options = CountOptions {
             show_lines: true,
             show_words: true,
-            show_bytes: true,
+            show_chars: true,
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
