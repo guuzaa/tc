@@ -1,6 +1,6 @@
-use std::process;
-
 rust_i18n::i18n!("locales");
+
+use std::process;
 
 mod cmd;
 mod counts;

@@ -68,6 +68,8 @@ fn test_multiple_files() {
         .stdout(predicate::str::contains(
             "       2       6      36      11 total",
         ));
+    fs::remove_file(file1_path).unwrap();
+    fs::remove_file(file2_path).unwrap();
 }
 
 #[test]
@@ -146,6 +148,8 @@ fn test_error_code_without_termination() {
     assert!(stdout.contains("total"));
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(stderr.contains("non_existent.txt"));
+    fs::remove_file(existing_file1).unwrap();
+    fs::remove_file(existing_file2).unwrap();
 }
 
 #[cfg(unix)]
