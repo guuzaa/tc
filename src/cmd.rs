@@ -3,6 +3,8 @@ use std::io;
 
 use crate::counts::CountOptions;
 use crate::input_processor::process_inputs;
+use crate::locales;
+
 #[derive(Parser)]
 #[command(author, version, about = "A simple count program by Rust and Cursor")]
 pub struct Cli {
@@ -76,6 +78,7 @@ impl Cli {
 }
 
 pub fn run() -> io::Result<()> {
+    locales::setup_localization();
     let (cli, options) = Cli::parse_args();
     process_inputs(&cli.files, &mut io::stdout(), &options)
 }

@@ -1,5 +1,6 @@
 use crate::cmd::TokenizerModel;
 use crate::counts::{CountOptions, InputCounts};
+use rust_i18n::t;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Write};
 use tiktoken_rs::{cl100k_base, o200k_base, p50k_base, p50k_edit, r50k_base};
@@ -17,7 +18,14 @@ where
         let mut reader = BufReader::new(stdin.lock());
         if let Err(err) = process_input(&mut reader, writer, options, None) {
             error_count += 1;
-            eprintln!("tc: Error processing stdin: {}", err);
+            match err.kind() {
+                io::ErrorKind::WriteZero => {
+                    eprintln!("{}", t!("error_writing_stdout"));
+                }
+                _ => {
+                    eprintln!("{}", t!("error_reading_stdin"));
+                }
+            }
         }
     } else {
         for filename in files {
@@ -28,20 +36,55 @@ where
                     }
                     Err(err) => {
                         error_count += 1;
-                        eprintln!("tc: Error processing file '{}': {}", filename, err)
+                        match err.kind() {
+                            io::ErrorKind::WriteZero => {
+                                eprintln!("{}", t!("error_writing_stdout"));
+                            }
+                            _ => {
+                                eprintln!(
+                                    "{}",
+                                    t!(
+                                        "error_reading_file",
+                                        filename = filename,
+                                        error = err.kind()
+                                    )
+                                );
+                            }
+                        }
                     }
                 },
                 Err(err) => {
                     error_count += 1;
-                    eprintln!("tc: Error opening file '{}': {}", filename, err)
+                    match err.kind() {
+                        io::ErrorKind::NotFound => {
+                            eprintln!("{}", t!("error_not_found", filename = filename));
+                        }
+                        io::ErrorKind::PermissionDenied => {
+                            eprintln!("{}", t!("error_permission_denied", filename = filename));
+                        }
+                        _ => {
+                            eprintln!(
+                                "{}",
+                                t!(
+                                    "error_opening_file",
+                                    filename = filename,
+                                    error = err.kind()
+                                )
+                            );
+                        }
+                    }
                 }
             }
             file_count += 1;
         }
     }
-
     if file_count > 1 {
-        print_counts(writer, &total_counts, options, Some("total"))?;
+        print_counts(
+            writer,
+            &total_counts,
+            options,
+            Some(&format!("{}", t!("total"))),
+        )?;
     }
 
     if error_count > 0 {
@@ -147,7 +190,11 @@ fn print_counts<W: Write>(
         output.push_str(&format!(" {}", name));
     }
 
-    writeln!(writer, "{}", output.trim_end())
+    if let Err(_) = writeln!(writer, "{}", output.trim_end()) {
+        Err(io::Error::new(io::ErrorKind::WriteZero, ""))
+    } else {
+        Ok(())
+    }
 }
 
 #[cfg(test)]

@@ -1,6 +1,6 @@
 use assert_cmd::Command;
 use predicates::prelude::*;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::Write;
 use tempfile::tempdir;
 
@@ -76,7 +76,9 @@ fn test_non_existent_file() {
     cmd.arg("non_existent_file.txt")
         .assert()
         .failure()
-        .stderr(predicate::str::contains("tc: Error opening file"));
+        .stderr(predicate::str::contains(
+            "tc: non_existent_file.txt: No such file",
+        ));
 }
 
 #[test]
@@ -130,7 +132,7 @@ fn test_error_code_without_termination() {
         .failure()
         .code(1) // Expect an error code of 1
         .stdout(predicate::str::contains("       1       5      26       7")) // Output for first existing file
-        .stderr(predicate::str::contains("tc: Error opening file")) // Error message for non-existent file
+        .stderr(predicate::str::contains("No such file")) // Error message for non-existent file
         .stdout(predicate::str::contains("       1       5      31       7")) // Output for second existing file
         .stdout(predicate::str::contains(
             "       2      10      57      14 total",
@@ -144,4 +146,55 @@ fn test_error_code_without_termination() {
     assert!(stdout.contains("total"));
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(stderr.contains("non_existent.txt"));
+}
+
+#[cfg(unix)]
+#[test]
+fn test_permission_denied() {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = tempdir().unwrap();
+    let file_path = dir.path().join("no_permission.txt");
+
+    let mut file = File::create(&file_path).unwrap();
+    write!(file, "This is a test file.").unwrap();
+
+    let mut perms = fs::metadata(&file_path).unwrap().permissions();
+    perms.set_mode(0o000);
+    fs::set_permissions(&file_path, perms).unwrap();
+
+    let mut cmd = Command::cargo_bin("tc").unwrap();
+    cmd.arg(&file_path)
+        .assert()
+        .failure()
+        .code(1)
+        .stderr(predicate::str::contains("Permission denied"));
+
+    let mut perms = fs::metadata(&file_path).unwrap().permissions();
+    perms.set_mode(0o644);
+    fs::set_permissions(&file_path, perms).unwrap();
+    let mut cmd = Command::cargo_bin("tc").unwrap();
+    cmd.arg(&file_path)
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("       1       5      20       6"));
+    fs::remove_file(&file_path).unwrap();
+}
+
+#[test]
+fn test_directory_counting() {
+    let dir = tempdir().unwrap();
+
+    // Create a subdirectory
+    let subdir_path = dir.path().join("subdir");
+    fs::create_dir(&subdir_path).unwrap();
+
+    let mut cmd = Command::cargo_bin("tc").unwrap();
+    cmd.arg(dir.path())
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains(format!(
+            "tc: {}: Error reading file:",
+            dir.path().to_string_lossy()
+        )));
+    fs::remove_dir_all(dir).unwrap();
 }
