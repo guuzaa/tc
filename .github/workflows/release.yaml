@@ -79,6 +79,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: taiki-e/install-action@cross
 
+      - name: Cargo cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+
       - name: Build | Cargo
         if: matrix.os != 'ubuntu-latest'
         run: cargo build --release --locked --target ${{ matrix.target }}
