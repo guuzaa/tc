@@ -114,8 +114,6 @@ jobs:
       - name: Upload artifacts
         uses: AButler/upload-release-assets@v3.0
         with:
-          files: |
-            ${{ matrix.name }}
-            ${{ matrix.name }}.sha256
+          files: ${{ matrix.name }};${{ matrix.name }}.sha256
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: ${{ github.ref_name }}
