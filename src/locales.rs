@@ -1,5 +1,10 @@
 pub fn setup_localization() {
     let locale = sys_locale::get_locale().unwrap_or_else(|| String::from("en"));
+    let locale = if locale == "C" {
+        String::from("en")
+    } else {
+        locale
+    };
     rust_i18n::set_locale(&locale);
 }
 
@@ -21,10 +26,7 @@ mod tests {
             ),
             "tc: test.txt: Error reading file: Permission denied"
         );
-    }
 
-    #[test]
-    fn test_japanese_localization() {
         rust_i18n::set_locale("ja");
 
         assert_eq!(
