@@ -84,6 +84,20 @@
         "reveal": "always",
         "close": false
       }
+    },
+    {
+      "label": "cargo fmt",
+      "type": "shell",
+      "command": "cargo fmt -v",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "close": false
+      }
     }
   ]
 }

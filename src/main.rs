@@ -1,4 +1,4 @@
-rust_i18n::i18n!("locales", fallback="en");
+rust_i18n::i18n!("locales", fallback = "en");
 
 use std::process;
 
