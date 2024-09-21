@@ -200,12 +200,11 @@ fn print_counts<W: Write>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use tempfile::NamedTempFile;
 
     #[test]
     fn test_empty_input() {
-        let test_file = "tc_test_tmp_empty_input.txt";
-        let input = b"";
-        std::fs::write(test_file, input).unwrap();
+        let temp_file = NamedTempFile::new().unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -214,19 +213,27 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             output,
-            format!("       0       0       0 {}\n", test_file).as_bytes()
+            format!(
+                "       0       0       0 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
+            .as_bytes()
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_single_word() {
-        let test_file = "tc_test_tmp_single_word.txt";
-        let input = b"hello";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"hello").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -235,19 +242,26 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       1       5 {}\n", test_file)
+            format!(
+                "       1       1       5 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_multiple_words() {
-        let test_file = "tc_test_tmp_multiple_words.txt";
-        let input = b"hello world\nrust is great";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"hello world\nrust is great").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -256,19 +270,26 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       2       5      25 {}\n", test_file)
+            format!(
+                "       2       5      25 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_show_lines_only() {
-        let test_file = "tc_test_tmp_show_lines_only.txt";
-        let input = b"hello\nworld\n";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"hello\nworld\n").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -277,19 +298,23 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("2 {}\n", test_file)
+            format!("2 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_show_words_only() {
-        let test_file = "tc_test_tmp_show_words_only.txt";
-        let input = b"hello world rust";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"hello world rust").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
@@ -298,19 +323,23 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("3 {}\n", test_file)
+            format!("3 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_show_chars_only() {
-        let test_file = "tc_test_tmp_show_chars_only.txt";
-        let input = b"hello\n";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"hello\n").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
@@ -319,19 +348,23 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("6 {}\n", test_file)
+            format!("6 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_utf8_characters() {
-        let test_file = "tc_test_tmp_utf8_characters.txt";
-        let input = "Hello, 世界!\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all("Hello, 世界!\n".as_bytes()).unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -340,19 +373,26 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       2      11 {}\n", test_file)
+            format!(
+                "       1       2      11 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_multi_byte_characters() {
-        let test_file = "tc_test_tmp_multi_byte_characters.txt";
-        let input = "🚀 Rust 💻\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all("🚀 Rust 💻\n".as_bytes()).unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -361,19 +401,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       3       9 {}\n", test_file)
+            format!(
+                "       1       3       9 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_korean_characters() {
-        let test_file = "tc_test_tmp_korean_characters.txt";
-        let input = "안녕하세요 세계!\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("안녕하세요 세계!\n".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -382,19 +431,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       2      10 {}\n", test_file)
+            format!(
+                "       1       2      10 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_japanese_characters() {
-        let test_file = "tc_test_tmp_japanese_characters.txt";
-        let input = "こんにちは 世界！\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("こんにちは 世界！\n".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -403,19 +461,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       2      10 {}\n", test_file)
+            format!(
+                "       1       2      10 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_mixed_languages() {
-        let test_file = "tc_test_tmp_mixed_languages.txt";
-        let input = "Hello 안녕 こんにちは World!\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("Hello 안녕 こんにちは World!\n".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -424,19 +491,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       1       4      22 {}\n", test_file)
+            format!(
+                "       1       4      22 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_korean_multiline() {
-        let test_file = "tc_test_tmp_korean_multiline.txt";
-        let input = "안녕하세요\n세계입니다\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("안녕하세요\n세계입니다\n".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -445,19 +521,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       2       2      12 {}\n", test_file)
+            format!(
+                "       2       2      12 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_japanese_multiline() {
-        let test_file = "tc_test_tmp_japanese_multiline.txt";
-        let input = "こんにちは\n世界です\n";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("こんにちは\n世界です\n".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -466,19 +551,28 @@ mod tests {
             show_tokens: false,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       2       2      11 {}\n", test_file)
+            format!(
+                "       2       2      11 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_show_tokens() {
-        let test_file = "tc_test_tmp_show_tokens.txt";
-        let input = "Hello, world!\n世界です";
-        std::fs::write(test_file, input.as_bytes()).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all("Hello, world!\n世界です".as_bytes())
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
@@ -487,19 +581,25 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::Edit,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("11 {}\n", test_file)
+            format!("11 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_all_options() {
-        let test_file = "tc_test_tmp_all_options.txt";
-        let input = b"Hello, world!\nThis is a test.";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all(b"Hello, world!\nThis is a test.")
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -508,19 +608,26 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       2       6      29      10 {}\n", test_file)
+            format!(
+                "       2       6      29      10 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_show_tokens_with_different_models() {
-        let test_file = "tc_test_tmp_show_tokens_with_model.txt";
-        let input = b"Hello, world!";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"Hello, world!").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
@@ -529,15 +636,19 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT3,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("4 {}\n", test_file)
+            format!("4 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
-
-        let test_file = "tc_test_tmp_show_tokens_with_model.txt";
-        std::fs::write(test_file, input).unwrap();
+        temp_file.close().unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file.write_all(b"Hello, world!").unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: false,
@@ -546,19 +657,25 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("4 {}\n", test_file)
+            format!("4 {}\n", temp_file.path().to_str().unwrap())
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 
     #[test]
     fn test_all_options_with_model() {
-        let test_file = "tc_test_tmp_all_options_with_model.txt";
-        let input = b"Hello, world!\nThis is a test.";
-        std::fs::write(test_file, input).unwrap();
+        let mut temp_file = NamedTempFile::new().unwrap();
+        temp_file
+            .write_all(b"Hello, world!\nThis is a test.")
+            .unwrap();
         let mut output = Vec::new();
         let options = CountOptions {
             show_lines: true,
@@ -567,11 +684,19 @@ mod tests {
             show_tokens: true,
             tokenizer_model: TokenizerModel::GPT4O,
         };
-        process_inputs(&[test_file.to_string()], &mut output, &options).unwrap();
+        process_inputs(
+            &[temp_file.path().to_str().unwrap().to_string()],
+            &mut output,
+            &options,
+        )
+        .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("       2       6      29       9 {}\n", test_file)
+            format!(
+                "       2       6      29       9 {}\n",
+                temp_file.path().to_str().unwrap()
+            )
         );
-        std::fs::remove_file(test_file).unwrap();
+        temp_file.close().unwrap();
     }
 }
