@@ -167,27 +167,23 @@ fn print_counts<W: Write>(
     filename: Option<&str>,
 ) -> io::Result<()> {
     let mut output = String::new();
-    let format_len = if options.count_enabled_options() == 1 {
-        0
-    } else {
-        8
-    };
+    const FORMAT_LEN: usize = 8;
 
     if options.show_lines {
-        output.push_str(&format!("{:format_len$}", counts.lines));
+        output.push_str(&format!("{: >width$} ", counts.lines, width = FORMAT_LEN));
     }
     if options.show_words {
-        output.push_str(&format!("{:format_len$}", counts.words));
+        output.push_str(&format!("{: >width$} ", counts.words, width = FORMAT_LEN));
     }
     if options.show_chars {
-        output.push_str(&format!("{:format_len$}", counts.chars));
+        output.push_str(&format!("{: >width$} ", counts.chars, width = FORMAT_LEN));
     }
     if options.show_tokens {
-        output.push_str(&format!("{:format_len$}", counts.tokens));
+        output.push_str(&format!("{: >width$} ", counts.tokens, width = FORMAT_LEN));
     }
 
     if let Some(name) = filename {
-        output.push_str(&format!(" {}", name));
+        output.push_str(name);
     }
 
     if writeln!(writer, "{}", output.trim_end()).is_err() {
@@ -222,7 +218,7 @@ mod tests {
         assert_eq!(
             output,
             format!(
-                "       0       0       0 {}\n",
+                "       0        0        0 {}\n",
                 temp_file.path().to_str().unwrap()
             )
             .as_bytes()
@@ -251,7 +247,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       1       5 {}\n",
+                "       1        1        5 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -279,7 +275,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       2       5      25 {}\n",
+                "       2        5       25 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -306,7 +302,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("2 {}\n", temp_file.path().to_str().unwrap())
+            format!("       2 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
     }
@@ -331,7 +327,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("3 {}\n", temp_file.path().to_str().unwrap())
+            format!("       3 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
     }
@@ -356,7 +352,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("6 {}\n", temp_file.path().to_str().unwrap())
+            format!("       6 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
     }
@@ -382,7 +378,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       2      11 {}\n",
+                "       1        2       11 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -410,7 +406,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       3       9 {}\n",
+                "       1        3        9 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -440,7 +436,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       2      10 {}\n",
+                "       1        2       10 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -470,7 +466,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       2      10 {}\n",
+                "       1        2       10 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -500,7 +496,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       1       4      22 {}\n",
+                "       1        4       22 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -530,7 +526,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       2       2      12 {}\n",
+                "       2        2       12 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -560,7 +556,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       2       2      11 {}\n",
+                "       2        2       11 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -589,7 +585,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("11 {}\n", temp_file.path().to_str().unwrap())
+            format!("      11 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
     }
@@ -617,7 +613,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       2       6      29      10 {}\n",
+                "       2        6       29       10 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
@@ -644,7 +640,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("4 {}\n", temp_file.path().to_str().unwrap())
+            format!("       4 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
         let mut temp_file = NamedTempFile::new().unwrap();
@@ -665,7 +661,7 @@ mod tests {
         .unwrap();
         assert_eq!(
             String::from_utf8(output).unwrap(),
-            format!("4 {}\n", temp_file.path().to_str().unwrap())
+            format!("       4 {}\n", temp_file.path().to_str().unwrap())
         );
         temp_file.close().unwrap();
     }
@@ -693,7 +689,7 @@ mod tests {
         assert_eq!(
             String::from_utf8(output).unwrap(),
             format!(
-                "       2       6      29       9 {}\n",
+                "       2        6       29        9 {}\n",
                 temp_file.path().to_str().unwrap()
             )
         );
