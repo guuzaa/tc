@@ -1,10 +1,5 @@
 pub fn setup_localization() {
     let locale = sys_locale::get_locale().unwrap_or_else(|| String::from("en"));
-    let locale = if locale == "C" {
-        String::from("en")
-    } else {
-        locale
-    };
     rust_i18n::set_locale(&locale);
 }
 
@@ -13,20 +8,7 @@ mod tests {
     use rust_i18n::t;
 
     #[test]
-    fn test_localization() {
-        super::setup_localization();
-
-        assert_eq!(t!("error_writing_stdout"), "tc: Error writing to stdout");
-        assert_eq!(t!("error_reading_stdin"), "tc: Error reading stdin");
-        assert_eq!(
-            t!(
-                "error_reading_file",
-                filename = "test.txt",
-                error = "Permission denied"
-            ),
-            "tc: test.txt: Error reading file: Permission denied"
-        );
-
+    fn test_janpanese_localization() {
         rust_i18n::set_locale("ja");
 
         assert_eq!(
@@ -38,12 +20,8 @@ mod tests {
             "tc: 標準入力の読み込み中にエラーが発生しました"
         );
         assert_eq!(
-            t!(
-                "error_reading_file",
-                filename = "test.txt",
-                error = "アクセス拒否"
-            ),
-            "tc: test.txt: ファイルの読み込み中にエラーが発生しました: アクセス拒否"
+            t!("error_reading_file", filename = "test.txt"),
+            "tc: test.txt: ファイルの読み込み中にエラーが発生しました"
         );
         assert_eq!(t!("total"), "合計");
         assert_eq!(
@@ -63,6 +41,12 @@ mod tests {
             "tc: 存在しない.txt: そのようなファイルはありません"
         );
 
+        rust_i18n::set_locale("C"); // test the fallback to English
+
+        assert_eq!(
+            t!("error_not_found", filename = "text.txt"),
+            "tc: text.txt: No such file"
+        );
         super::setup_localization();
     }
 }

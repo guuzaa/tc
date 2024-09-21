@@ -10,7 +10,7 @@ fn test_empty_input() {
     cmd.write_stdin("")
         .assert()
         .success()
-        .stdout("       0       0       0       0\n");
+        .stdout("       0        0        0        0\n");
 }
 
 #[test]
@@ -19,7 +19,7 @@ fn test_single_word() {
     cmd.write_stdin("hello")
         .assert()
         .success()
-        .stdout("       1       1       5       1\n");
+        .stdout("       1        1        5        1\n");
 }
 
 #[test]
@@ -28,7 +28,7 @@ fn test_multiple_words() {
     cmd.write_stdin("hello world\nrust is great")
         .assert()
         .success()
-        .stdout("       2       5      25       6\n");
+        .stdout("       2        5       25        6\n");
 }
 
 #[test]
@@ -43,7 +43,9 @@ fn test_file_input() {
     cmd.arg(file_path)
         .assert()
         .success()
-        .stdout(predicate::str::contains("       2       6      30      11"));
+        .stdout(predicate::str::contains(
+            "       2        6       30       11",
+        ));
 }
 
 #[test]
@@ -63,10 +65,14 @@ fn test_multiple_files() {
         .arg(&file2_path)
         .assert()
         .success()
-        .stdout(predicate::str::contains("       1       2      14       5"))
-        .stdout(predicate::str::contains("       1       4      22       6"))
         .stdout(predicate::str::contains(
-            "       2       6      36      11 total",
+            "       1        2       14        5",
+        ))
+        .stdout(predicate::str::contains(
+            "       1        4       22        6",
+        ))
+        .stdout(predicate::str::contains(
+            "       2        6       36       11 total",
         ));
     fs::remove_file(file1_path).unwrap();
     fs::remove_file(file2_path).unwrap();
@@ -90,7 +96,7 @@ fn test_specific_options() {
         .write_stdin("Hello\nWorld\nRust")
         .assert()
         .success()
-        .stdout("       3       3\n");
+        .stdout("       3        3\n");
 }
 
 #[test]
@@ -99,7 +105,7 @@ fn test_utf8_input() {
     cmd.write_stdin("Hello, 世界!")
         .assert()
         .success()
-        .stdout("       1       2      10       8\n");
+        .stdout("       1        2       10        8\n");
 }
 
 #[test]
@@ -109,7 +115,7 @@ fn test_different_tokenizer_model() {
         .write_stdin("Hello, world!")
         .assert()
         .success()
-        .stdout("       1       2      13       4\n");
+        .stdout("       1        2       13        4\n");
 }
 
 #[test]
@@ -133,11 +139,15 @@ fn test_error_code_without_termination() {
         .assert()
         .failure()
         .code(1) // Expect an error code of 1
-        .stdout(predicate::str::contains("       1       5      26       7")) // Output for first existing file
-        .stderr(predicate::str::contains("No such file")) // Error message for non-existent file
-        .stdout(predicate::str::contains("       1       5      31       7")) // Output for second existing file
         .stdout(predicate::str::contains(
-            "       2      10      57      14 total",
+            "       1        5       26        7",
+        )) // Output for first existing file
+        .stderr(predicate::str::contains("No such file")) // Error message for non-existent file
+        .stdout(predicate::str::contains(
+            "       1        5       31        7",
+        )) // Output for second existing file
+        .stdout(predicate::str::contains(
+            "       2       10       57       14 total",
         )); // Total count
 
     // Verify that the process didn't terminate early by checking if it processed both existing files
@@ -180,7 +190,9 @@ fn test_permission_denied() {
     cmd.arg(&file_path)
         .assert()
         .success()
-        .stdout(predicate::str::contains("       1       5      20       6"));
+        .stdout(predicate::str::contains(
+            "       1        5       20        6",
+        ));
     fs::remove_file(&file_path).unwrap();
 }
 
@@ -198,7 +210,7 @@ fn test_directory_counting() {
         .assert()
         .failure()
         .stderr(predicate::str::contains(format!(
-            "tc: {}: Error reading file:",
+            "tc: {}: Is a directory",
             dir.path().to_string_lossy()
         )));
     fs::remove_dir_all(dir).unwrap();

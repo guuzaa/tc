@@ -56,7 +56,7 @@ impl Cli {
         let options = CountOptions {
             show_lines: cli.lines,
             show_words: cli.words,
-            show_bytes: cli.chars,
+            show_chars: cli.chars,
             show_tokens: cli.tokens,
             tokenizer_model: cli.model.unwrap_or(TokenizerModel::GPT3),
         };
@@ -65,7 +65,7 @@ impl Cli {
             CountOptions {
                 show_lines: true,
                 show_words: true,
-                show_bytes: true,
+                show_chars: true,
                 show_tokens: true,
                 tokenizer_model: options.tokenizer_model,
             }
