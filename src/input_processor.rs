@@ -3,6 +3,7 @@ use crate::counts::{CountOptions, InputCounts};
 use rust_i18n::t;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Write};
+use std::path::Path;
 use tiktoken_rs::{cl100k_base, o200k_base, p50k_base, p50k_edit, r50k_base};
 
 pub fn process_inputs<W>(files: &[String], writer: &mut W, options: &CountOptions) -> io::Result<()>
@@ -29,6 +30,11 @@ where
         }
     } else {
         for filename in files {
+            if Path::new(&filename).is_dir() {
+                error_count += 1;
+                eprintln!("{}", t!("error_is_a_directory", filename = filename));
+                continue;
+            }
             match File::open(filename) {
                 Ok(mut file) => match process_input(&mut file, writer, options, Some(filename)) {
                     Ok(counts) => {
@@ -41,14 +47,7 @@ where
                                 eprintln!("{}", t!("error_writing_stdout"));
                             }
                             _ => {
-                                eprintln!(
-                                    "{}",
-                                    t!(
-                                        "error_reading_file",
-                                        filename = filename,
-                                        error = err.kind()
-                                    )
-                                );
+                                eprintln!("{}", t!("error_reading_file", filename = filename));
                             }
                         }
                     }

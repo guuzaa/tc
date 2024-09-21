@@ -20,12 +20,8 @@ mod tests {
             "tc: 標準入力の読み込み中にエラーが発生しました"
         );
         assert_eq!(
-            t!(
-                "error_reading_file",
-                filename = "test.txt",
-                error = "アクセス拒否"
-            ),
-            "tc: test.txt: ファイルの読み込み中にエラーが発生しました: アクセス拒否"
+            t!("error_reading_file", filename = "test.txt"),
+            "tc: test.txt: ファイルの読み込み中にエラーが発生しました"
         );
         assert_eq!(t!("total"), "合計");
         assert_eq!(
@@ -45,6 +41,12 @@ mod tests {
             "tc: 存在しない.txt: そのようなファイルはありません"
         );
 
+        rust_i18n::set_locale("C"); // test the fallback to English
+
+        assert_eq!(
+            t!("error_not_found", filename = "text.txt"),
+            "tc: text.txt: No such file"
+        );
         super::setup_localization();
     }
 }

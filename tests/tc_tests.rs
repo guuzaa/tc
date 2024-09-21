@@ -210,7 +210,7 @@ fn test_directory_counting() {
         .assert()
         .failure()
         .stderr(predicate::str::contains(format!(
-            "tc: {}: Error reading file:",
+            "tc: {}: Is a directory",
             dir.path().to_string_lossy()
         )));
     fs::remove_dir_all(dir).unwrap();
