@@ -3,12 +3,18 @@
   "tasks": [
     {
       "label": "cargo build",
-      "type": "shell",
-      "command": "cargo build -r",
+      "type": "cargo",
+      "command": "build",
+      "args": [
+        "-r"
+      ],
       "group": {
         "kind": "build",
         "isDefault": false
       },
+      "problemMatcher": [
+        "$rustc"
+      ],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -17,12 +23,15 @@
     },
     {
       "label": "cargo check",
-      "type": "shell",
-      "command": "cargo check",
+      "type": "cargo",
+      "command": "check",
       "group": {
-        "kind": "build",
+        "kind": "test",
         "isDefault": false
       },
+      "problemMatcher": [
+        "$rustc"
+      ],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -31,8 +40,8 @@
     },
     {
       "label": "cargo clean",
-      "type": "shell",
-      "command": "cargo clean",
+      "type": "cargo",
+      "command": "clean",
       "group": {
         "kind": "build",
         "isDefault": false
@@ -45,12 +54,15 @@
     },
     {
       "label": "cargo run",
-      "type": "shell",
-      "command": "cargo run",
+      "type": "cargo",
+      "command": "run",
       "group": {
         "kind": "build",
         "isDefault": false
       },
+      "problemMatcher": [
+        "$rustc"
+      ],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -59,12 +71,15 @@
     },
     {
       "label": "cargo test",
-      "type": "shell",
-      "command": "cargo test",
+      "type": "cargo",
+      "command": "test",
       "group": {
-        "kind": "build",
+        "kind": "test",
         "isDefault": false
       },
+      "problemMatcher": [
+        "$rustc"
+      ],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -73,12 +88,20 @@
     },
     {
       "label": "cargo clippy",
-      "type": "shell",
-      "command": "cargo clippy -- -D warnings",
+      "type": "cargo",
+      "command": "clippy",
+      "args": [
+        "--",
+        "-D",
+        "warnings"
+      ],
       "group": {
-        "kind": "build",
+        "kind": "test",
         "isDefault": false
       },
+      "problemMatcher": [
+        "$rustc"
+      ],
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -87,8 +110,8 @@
     },
     {
       "label": "cargo fmt",
-      "type": "shell",
-      "command": "cargo fmt -v",
+      "type": "cargo",
+      "command": "fmt",
       "group": {
         "kind": "build",
         "isDefault": false

@@ -1,7 +1,12 @@
 [package]
 name = "tc"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
+description = "A simple and efficient token count program."
+authors = ["guza <guza@duck.com>"]
+repository = "https://github.com/guuzaa/tc"
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 clap = { version = "4.3", features = ["derive"] }
