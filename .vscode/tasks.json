@@ -109,6 +109,23 @@
       }
     },
     {
+      "label": "cargo bench",
+      "type": "cargo",
+      "command": "bench",
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "problemMatcher": [
+        "$rustc"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "close": false
+      }
+    },
+    {
       "label": "cargo fmt",
       "type": "cargo",
       "command": "fmt",
@@ -118,7 +135,7 @@
       },
       "presentation": {
         "echo": true,
-        "reveal": "always",
+        "reveal": "never",
         "close": false
       }
     }
