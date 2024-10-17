@@ -7,6 +7,8 @@ authors = ["guza <guza@duck.com>"]
 repository = "https://github.com/guuzaa/tc"
 license = "MIT"
 readme = "README.md"
+exclude = [".github/*", ".vscode/*"]
+categories = ["command-line-utilities", "cli-apps", "text-processing"]
 
 [dependencies]
 clap = { version = "4.3", features = ["derive"] }
@@ -18,3 +20,8 @@ tiktoken-rs = "0.5.9"
 assert_cmd = "2.0"
 predicates = "3.0.0"
 tempfile = "3.12.0"
+criterion = "0.5"
+
+[[bench]]
+name = "tc_benches"
+harness = false
